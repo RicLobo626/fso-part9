@@ -1,3 +1,5 @@
+import { runWithCatch } from "./helpers";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -8,7 +10,29 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (hourList: number[], target: number) => {
+interface ExerciseValues {
+  hourList: number[];
+  target: number;
+}
+
+const parseArguments = (args: string[]): ExerciseValues => {
+  const [, , ...values] = args;
+
+  if (values.length < 2) throw new Error("Not enough arguments");
+
+  const numbers = values.map((v) => +v);
+  const isValid = numbers.every((n) => !isNaN(n));
+
+  if (!isValid) {
+    throw new Error("Provided values must be valid numbers.");
+  }
+
+  const [target, ...hourList] = numbers;
+
+  return { hourList, target };
+};
+
+const calculateExercises = (hourList: number[], target: number): Result => {
   const periodLength = hourList.length;
   const trainingDays = hourList.reduce((acc, h) => (h > 0 ? acc + 1 : acc), 0);
   const hourSum = hourList.reduce((acc, h) => acc + h, 0);
@@ -45,4 +69,7 @@ const calculateExercises = (hourList: number[], target: number) => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+runWithCatch(() => {
+  const { hourList, target } = parseArguments(process.argv);
+  console.log(calculateExercises(hourList, target));
+});
