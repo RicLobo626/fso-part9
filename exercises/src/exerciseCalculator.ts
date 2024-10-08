@@ -11,31 +11,45 @@ interface Result {
 }
 
 interface ExerciseValues {
-  hourList: number[];
+  dailyExercises: number[];
   target: number;
 }
 
-const parseArguments = (args: string[]): ExerciseValues => {
-  const [, , ...values] = args;
+export const parseValues = (
+  dailyExercises: unknown,
+  target: unknown
+): ExerciseValues => {
+  if (!dailyExercises || !target) {
+    throw new Error("Values are missing");
+  }
 
-  if (values.length < 2) throw new Error("Not enough arguments");
+  if (!Array.isArray(dailyExercises)) {
+    throw new Error("Daily exercises value must be an array.");
+  }
 
-  const numbers = values.map((v) => +v);
-  const isValid = numbers.every((n) => !isNaN(n));
+  const dailyExercisesNums = dailyExercises.map((v) => +v);
+
+  const targetNum = +target;
+
+  const isValid = !isNaN(targetNum) && dailyExercisesNums.every((n) => !isNaN(n));
 
   if (!isValid) {
     throw new Error("Provided values must be valid numbers.");
   }
 
-  const [target, ...hourList] = numbers;
-
-  return { hourList, target };
+  return {
+    dailyExercises: dailyExercisesNums,
+    target: targetNum,
+  };
 };
 
-const calculateExercises = (hourList: number[], target: number): Result => {
-  const periodLength = hourList.length;
-  const trainingDays = hourList.reduce((acc, h) => (h > 0 ? acc + 1 : acc), 0);
-  const hourSum = hourList.reduce((acc, h) => acc + h, 0);
+export const calculateExercises = (
+  dailyExercises: number[],
+  target: number
+): Result => {
+  const periodLength = dailyExercises.length;
+  const trainingDays = dailyExercises.reduce((acc, h) => (h > 0 ? acc + 1 : acc), 0);
+  const hourSum = dailyExercises.reduce((acc, h) => acc + h, 0);
   const average = hourSum / periodLength;
   const success = average >= target;
 
@@ -69,7 +83,19 @@ const calculateExercises = (hourList: number[], target: number): Result => {
   };
 };
 
-runWithCatch(() => {
-  const { hourList, target } = parseArguments(process.argv);
-  console.log(calculateExercises(hourList, target));
-});
+if (require.main === module) {
+  runWithCatch(() => {
+    const parseArguments = (args: string[]): ExerciseValues => {
+      const [, , ...values] = args;
+
+      if (values.length < 2) throw new Error("Not enough arguments");
+
+      const [target, ...dailyExercises] = values;
+
+      return parseValues(dailyExercises, target);
+    };
+
+    const { dailyExercises, target } = parseArguments(process.argv);
+    console.log(calculateExercises(dailyExercises, target));
+  });
+}
