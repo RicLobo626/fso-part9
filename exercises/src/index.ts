@@ -1,5 +1,9 @@
 import express from "express";
 import { calculateBmi, parseValues } from "./bmiCalculator";
+import {
+  calculateExercises,
+  parseValues as parseExerciseValues,
+} from "./exerciseCalculator";
 
 const app = express();
 
@@ -20,8 +24,33 @@ app.get("/bmi", (req, res) => {
       height,
       bmi,
     });
-  } catch (error) {
+  } catch {
     res.json({ error: "malformatted parameters" });
+  }
+});
+
+app.use(express.json());
+
+app.post("/exercises", (req, res, next) => {
+  const body = req.body as { daily_exercises: unknown; target: unknown };
+
+  try {
+    const { dailyExercises, target } = parseExerciseValues(
+      body.daily_exercises,
+      body.target
+    );
+
+    const result = calculateExercises(dailyExercises, target);
+
+    res.json(result);
+  } catch (e) {
+    if (!(e instanceof Error)) {
+      next(e);
+    } else if (e.message === "Values are missing") {
+      res.json({ error: "parameters missing" });
+    } else {
+      res.json({ error: "malformatted parameters" });
+    }
   }
 });
 
