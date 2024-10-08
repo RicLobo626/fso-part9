@@ -41,18 +41,20 @@ export const calculateBmi = (heightCm: number, weightKg: number): BmiCategory =>
   }
 };
 
-runWithCatch(() => {
-  const parseArguments = (args: string[]): BmiValues => {
-    const [, , ...values] = args;
+if (require.main === module) {
+  runWithCatch(() => {
+    const parseArguments = (args: string[]): BmiValues => {
+      const [, , ...values] = args;
 
-    if (values.length < 2) throw new Error("Not enough arguments");
-    if (values.length > 2) throw new Error("Too many arguments");
+      if (values.length < 2) throw new Error("Not enough arguments");
+      if (values.length > 2) throw new Error("Too many arguments");
 
-    const [height, weight] = values;
+      const [height, weight] = values;
 
-    return parseValues(height, weight);
-  };
+      return parseValues(height, weight);
+    };
 
-  const { height, weight } = parseArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-});
+    const { height, weight } = parseArguments(process.argv);
+    console.log(calculateBmi(height, weight));
+  });
+}
