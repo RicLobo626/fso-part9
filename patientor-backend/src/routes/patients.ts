@@ -4,5 +4,6 @@ import { patientsController } from "../controllers";
 const router = Router();
 
 router.get("/", patientsController.getPatients);
+router.post("/", patientsController.addPatient);
 
 export default router;
