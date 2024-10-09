@@ -13,4 +13,6 @@ export type Patient = {
   gender: string;
 };
 
+export type NewPatient = Omit<Patient, "id">;
+
 export type PublicPatient = Omit<Patient, "ssn">;
