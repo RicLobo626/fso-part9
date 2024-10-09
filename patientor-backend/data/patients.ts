@@ -1,4 +1,7 @@
-export default [
+import { Patient } from "../src/types";
+import { parseNewPatient } from "../src/utils/parsers";
+
+const data = [
   {
     id: "d2773336-f723-11e9-8f0b-362b9e155667",
     name: "John McClane",
@@ -40,3 +43,14 @@ export default [
     occupation: "Digital evangelist",
   },
 ];
+
+const patients = data.map(({ id, ...p }) => {
+  const parsedPatient = parseNewPatient(p) as Patient;
+
+  return {
+    ...parsedPatient,
+    id,
+  };
+});
+
+export default patients;
