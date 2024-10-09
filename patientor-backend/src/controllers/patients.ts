@@ -1,6 +1,6 @@
 import { RequestHandler, Response } from "express";
 import { PublicPatient } from "../types";
-import patientService from "../services/patients";
+import { patientService } from "../services";
 
 export const getPatients: RequestHandler = (
   _req,
