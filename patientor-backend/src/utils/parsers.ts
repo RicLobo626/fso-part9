@@ -1,5 +1,5 @@
-import { NewPatient } from "../types";
-import { isObject, isString, isDate } from "./validators";
+import { Gender, NewPatient } from "../types";
+import { isObject, isString, isDate, isGender } from "./validators";
 
 export class ParsingError extends Error {
   constructor(message: string) {
@@ -10,7 +10,7 @@ export class ParsingError extends Error {
 
 export const parseString = (text: unknown): string => {
   if (!isString(text)) {
-    throw new ParsingError("Incorrect or missing string: " + text);
+    throw new ParsingError(`Incorrect or missing string: ${text}`);
   }
 
   return text;
@@ -18,10 +18,18 @@ export const parseString = (text: unknown): string => {
 
 export const parseDate = (date: unknown): string => {
   if (!isDate(date)) {
-    throw new ParsingError("Incorrect or missing date: " + date);
+    throw new ParsingError(`Incorrect or missing date: ${date}`);
   }
 
   return date;
+};
+
+export const parseGender = (gender: unknown): Gender => {
+  if (!isGender(gender)) {
+    throw new ParsingError(`Incorrect or missing gender: ${gender}`);
+  }
+
+  return gender;
 };
 
 export const parseNewPatient = (obj: unknown): NewPatient => {
@@ -38,9 +46,9 @@ export const parseNewPatient = (obj: unknown): NewPatient => {
 
   return {
     name: parseString(obj.name),
-    dateOfBirth: parseDate(obj.dateOfBirth),
     ssn: parseString(obj.ssn),
     occupation: parseString(obj.occupation),
-    gender: parseString(obj.gender),
+    dateOfBirth: parseDate(obj.dateOfBirth),
+    gender: parseGender(obj.gender),
   };
 };
