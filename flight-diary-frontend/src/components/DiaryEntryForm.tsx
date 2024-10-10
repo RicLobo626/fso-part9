@@ -12,30 +12,46 @@ export const DiaryEntryForm = ({ onSubmit, error }: Props) => {
 
       <form onSubmit={onSubmit}>
         <div style={{ color: "red", marginBottom: "1em" }}>{error}</div>
-
         <div>
           <label htmlFor="date">Date</label>
-          <input type="text" id="date" name="date" />
+          <input type="date" id="date" name="date" />
         </div>
-        <div>
-          <label htmlFor="visibility">Visibility </label>
-          <select name="visibility" id="visibility">
-            <option value="great">Great</option>
-            <option value="good">Good</option>
-            <option value="ok">Ok</option>
-            <option value="poor">Poor</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="weather">Weather</label>
-          <select name="weather" id="weather">
-            <option value="sunny">Sunny</option>
-            <option value="rainy">Rainy</option>
-            <option value="cloudy">Cloudy</option>
-            <option value="stormy">Stormy</option>
-            <option value="windy">Windy</option>
-          </select>
-        </div>
+
+        <fieldset>
+          <legend>Select visibility</legend>
+
+          <input type="radio" id="great" name="visibility" value="great" />
+          <label htmlFor="great">Great</label>
+
+          <input type="radio" id="good" name="visibility" value="good" />
+          <label htmlFor="good">Good</label>
+
+          <input type="radio" id="ok" name="visibility" value="ok" />
+          <label htmlFor="ok">Ok</label>
+
+          <input type="radio" id="poor" name="visibility" value="poor" />
+          <label htmlFor="poor">Poor </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Select weather</legend>
+
+          <input type="radio" id="sunny" name="weather" value="sunny" />
+          <label htmlFor="sunny">Sunny</label>
+
+          <input type="radio" id="rainy" name="weather" value="rainy" />
+          <label htmlFor="rainy">Rainy</label>
+
+          <input type="radio" id="cloudy" name="weather" value="cloudy" />
+          <label htmlFor="cloudy">Cloudy</label>
+
+          <input type="radio" id="stormy" name="weather" value="stormy" />
+          <label htmlFor="stormy">Stormy</label>
+
+          <input type="radio" id="windy" name="weather" value="windy" />
+          <label htmlFor="windy">Windy</label>
+        </fieldset>
+
         <div>
           <label htmlFor="comment">Comment</label>
           <input type="text" id="comment" name="comment" />
