@@ -10,6 +10,7 @@ export const Entry = ({ entry }: Props) => {
       <h3>{entry.date}</h3>
       <p>Visibility: {entry.visibility}</p>
       <p>Weather: {entry.weather}</p>
+      <p>Comment: {entry.comment}</p>
     </li>
   );
 };
