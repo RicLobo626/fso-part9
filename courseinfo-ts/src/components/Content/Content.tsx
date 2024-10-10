@@ -1,4 +1,5 @@
-import { CoursePart } from "../types";
+import { CoursePart } from "../../types";
+import { Part } from "./Part";
 
 type Props = {
   courseParts: CoursePart[];
@@ -9,9 +10,7 @@ export const Content = ({ courseParts }: Props) => {
     <main>
       <ol>
         {courseParts.map((part) => (
-          <li key={part.name}>
-            {part.name} - {part.exerciseCount}
-          </li>
+          <Part key={part.name} part={part} />
         ))}
       </ol>
     </main>
