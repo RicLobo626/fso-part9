@@ -50,6 +50,5 @@ export const parseNewPatient = (obj: unknown): NewPatient => {
     occupation: parseString(obj.occupation),
     dateOfBirth: parseDate(obj.dateOfBirth),
     gender: parseGender(obj.gender),
-    entries: [],
   };
 };
