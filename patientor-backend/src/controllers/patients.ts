@@ -10,7 +10,7 @@ const getPatients: RequestHandler = (_req, res: Response<PublicPatient[]>) => {
 
 const getPatient: RequestHandler = (_req, res: Response<PublicPatient>) => {
   const { id } = _req.params;
-  const publicPatient = patientService.getPublicPatient(id);
+  const publicPatient = patientService.getPatient(id);
 
   if (publicPatient) {
     res.json(publicPatient);

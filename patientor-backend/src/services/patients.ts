@@ -6,8 +6,12 @@ const convertToPublicPatient = ({ ssn: _, ...p }: Patient): PublicPatient => p;
 
 const getPublicPatients = (): PublicPatient[] => patients.map(convertToPublicPatient);
 
+const getPatient = (id: string): Patient | undefined => {
+  return patients.find((p) => p.id === id);
+};
+
 const getPublicPatient = (id: string): PublicPatient | undefined => {
-  const patient = patients.find((p) => p.id === id);
+  const patient = getPatient(id);
 
   return patient && convertToPublicPatient(patient);
 };
@@ -25,6 +29,7 @@ const addPatient = (newPatient: NewPatient): PublicPatient => {
 
 export default {
   addPatient,
+  getPatient,
   getPublicPatients,
   getPublicPatient,
 };
