@@ -1,10 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 import PatientInfo from "./PatientInfo";
 import patientService from "../../services/patients";
 
-const PatientPage = () => {
+type Props = {
+  diagnoses: Diagnosis[];
+};
+
+const PatientPage = ({ diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
 
   const { id } = useParams() as { id: string };
@@ -19,7 +23,11 @@ const PatientPage = () => {
     getAndSetPatient();
   }, []);
 
-  return <section>{patient ? <PatientInfo patient={patient} /> : <h2>Patient not found</h2>}</section>;
+  return (
+    <section>
+      {patient ? <PatientInfo patient={patient} diagnoses={diagnoses} /> : <h2>Patient not found</h2>}
+    </section>
+  );
 };
 
 export default PatientPage;
