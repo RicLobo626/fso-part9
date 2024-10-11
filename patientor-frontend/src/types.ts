@@ -19,12 +19,12 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3,
 }
 
-type HealthCheckEntry = BaseEntry & {
+export type HealthCheckEntry = BaseEntry & {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 };
 
-type HospitalEntry = BaseEntry & {
+export type HospitalEntry = BaseEntry & {
   type: "Hospital";
   discharge: {
     date: string;
@@ -32,7 +32,7 @@ type HospitalEntry = BaseEntry & {
   };
 };
 
-type OccupationalHealthcareEntry = BaseEntry & {
+export type OccupationalHealthcareEntry = BaseEntry & {
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: {
