@@ -7,4 +7,6 @@ const router = Router();
 router.get("/", patientsController.getPatients);
 router.post("/", newPatientParser, patientsController.addPatient);
 
+router.get("/:id", patientsController.getPatient);
+
 export default router;
