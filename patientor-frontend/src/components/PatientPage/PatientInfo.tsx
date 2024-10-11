@@ -1,66 +1,13 @@
-import { Diagnosis, Entry, Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 import { Female, Male, Transgender } from "@mui/icons-material";
+import { Entries } from "./Entries";
 
-type EntryDiagnosisProps = {
-  code: Diagnosis["code"];
-  diagnoses: Diagnosis[];
-};
-
-type EntryDiagnosesProps = {
-  codes: Array<Diagnosis["code"]> | undefined;
-  diagnoses: Diagnosis[];
-};
-
-type EntriesProps = {
-  entries: Entry[];
-  diagnoses: Diagnosis[];
-};
-
-type PatientInfoProps = {
+type Props = {
   patient: Patient;
   diagnoses: Diagnosis[];
 };
 
-const EntryDiagnosis = ({ code, diagnoses }: EntryDiagnosisProps) => {
-  const diagnosis = diagnoses.find((d) => d.code === code);
-
-  return (
-    <li>
-      {code} {diagnosis?.name}
-    </li>
-  );
-};
-
-const EntryDiagnoses = ({ codes, diagnoses }: EntryDiagnosesProps) => {
-  if (!codes) return null;
-
-  return (
-    <ul>
-      {codes.map((code) => (
-        <EntryDiagnosis key={code} code={code} diagnoses={diagnoses} />
-      ))}
-    </ul>
-  );
-};
-
-const Entries = ({ entries, diagnoses }: EntriesProps) => {
-  if (entries.length === 0) {
-    return <p>No entries</p>;
-  }
-
-  return (
-    <ul>
-      {entries.map((entry) => (
-        <li key={entry.id}>
-          <strong>{entry.date}</strong> {entry.description}
-          <EntryDiagnoses codes={entry.diagnosisCodes} diagnoses={diagnoses} />
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-const PatientInfo = ({ patient, diagnoses }: PatientInfoProps) => {
+const PatientInfo = ({ patient, diagnoses }: Props) => {
   const getGenderIcon = () => {
     switch (patient.gender) {
       case "male":
