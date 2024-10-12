@@ -45,7 +45,7 @@ export type Entry = HospitalEntry | OccupationalHealthcareEntry | HealthCheckEnt
 
 type UnionOmit<T, K extends string | number | symbol> = Omit<T, K>;
 
-export type EntryWithoutId = UnionOmit<Entry, "id">;
+export type NewEntry = UnionOmit<Entry, "id">;
 
 export enum Gender {
   Male = "male",
