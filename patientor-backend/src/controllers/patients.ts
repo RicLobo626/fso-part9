@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from "express";
-import { NewPatient, PublicPatient } from "../types";
+import { NewEntry, NewPatient, PublicPatient } from "../types";
 import { patientService } from "../services";
 
 const getPatients: RequestHandler = (_req, res: Response<PublicPatient[]>) => {
@@ -8,8 +8,8 @@ const getPatients: RequestHandler = (_req, res: Response<PublicPatient[]>) => {
   res.json(publicPatients);
 };
 
-const getPatient: RequestHandler = (_req, res: Response<PublicPatient>) => {
-  const { id } = _req.params;
+const getPatient: RequestHandler = (req, res: Response<PublicPatient>) => {
+  const id = req.params.id;
   const publicPatient = patientService.getPatient(id);
 
   if (publicPatient) {
@@ -28,8 +28,21 @@ const addPatient: RequestHandler = (
   res.json(addedPatient);
 };
 
+const addEntry = (req: Request<{ id: string }, unknown, NewEntry>, res: Response) => {
+  const patientId = req.params.id;
+
+  const addedEntry = patientService.addEntry(patientId, req.body);
+
+  if (addedEntry) {
+    res.json(addedEntry);
+  } else {
+    res.status(404).end();
+  }
+};
+
 export default {
   getPatients,
-  addPatient,
   getPatient,
+  addPatient,
+  addEntry,
 };
