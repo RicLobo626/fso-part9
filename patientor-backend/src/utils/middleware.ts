@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 import { ParsingError } from "./parsers";
 import { z } from "zod";
-import { newPatientSchema } from "./schemas";
+import { newEntrySchema, newPatientSchema } from "./schemas";
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, _req, res, next) => {
   switch (true) {
@@ -18,6 +18,12 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _req, res, nex
 
 export const newPatientParser: RequestHandler = (req, _res, next) => {
   newPatientSchema.parse(req.body);
+
+  next();
+};
+
+export const newEntryParser: RequestHandler = (req, _res, next) => {
+  newEntrySchema.parse(req.body);
 
   next();
 };
