@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Entry, NewEntry } from "../../types";
+import { Entry, HealthCheckRating, NewEntry } from "../../types";
 
 type Props = {
   onAddEntry: (entry: NewEntry) => void;
@@ -37,13 +37,15 @@ export const EntryForm = ({ onAddEntry, onCancel, type, error }: Props) => {
 
     switch (type) {
       case "HealthCheck":
-        return { ...basicFields, type, healthCheckRating: 0 };
+        return { ...basicFields, type, healthCheckRating: HealthCheckRating.Healthy };
       case "OccupationalHealthcare":
         return { ...basicFields, type, employerName: "" };
       case "Hospital":
         return { ...basicFields, type, discharge: { date: "", criteria: "" } };
     }
   });
+
+  console.log(values.type === "HealthCheck" && values.healthCheckRating);
 
   const diagnosisCodeList = ["M24.2", "M51.2", "S03.5", "J10.1", "J06.9", "Z57.1", "N30.0"];
 
@@ -168,10 +170,13 @@ export const EntryForm = ({ onAddEntry, onCancel, type, error }: Props) => {
           <FormControl>
             <InputLabel>HealthCheck rating</InputLabel>
             <Select onChange={handleChangeHealthCheckRating} value={values.healthCheckRating} label="Age">
-              <MenuItem value={0}>Healthy</MenuItem>
-              <MenuItem value={1}>Low Risk</MenuItem>
-              <MenuItem value={2}>High Risk</MenuItem>
-              <MenuItem value={3}>Critical Risk</MenuItem>
+              {Object.entries(HealthCheckRating)
+                .filter(([_, value]) => !isNaN(Number(value))) // Only use numeric values (filter out reverse mappings)
+                .map(([key, value]) => (
+                  <MenuItem key={value} value={value}>
+                    {key}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         )}
