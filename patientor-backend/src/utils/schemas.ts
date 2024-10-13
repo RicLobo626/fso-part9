@@ -13,9 +13,9 @@ export const newPatientSchema = z
 
 const EntryBaseSchema = z
   .object({
-    description: z.string(),
-    date: z.string(),
-    specialist: z.string(),
+    description: z.string().min(3),
+    date: z.string().date(),
+    specialist: z.string().min(2),
     diagnosisCodes: z.array(z.string()).optional(),
   })
   .strict();
@@ -29,19 +29,19 @@ const HospitalEntrySchema = EntryBaseSchema.extend({
   type: z.literal("Hospital"),
   discharge: z
     .object({
-      date: z.string(),
-      criteria: z.string(),
+      date: z.string().date(),
+      criteria: z.string().min(2),
     })
     .strict(),
 }).strict();
 
 const OccupationalHealthcareEntrySchema = EntryBaseSchema.extend({
   type: z.literal("OccupationalHealthcare"),
-  employerName: z.string(),
+  employerName: z.string().min(1),
   sickLeave: z
     .object({
-      startDate: z.string(),
-      endDate: z.string(),
+      startDate: z.string().date(),
+      endDate: z.string().date(),
     })
     .strict()
     .optional(),
