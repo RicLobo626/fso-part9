@@ -6,6 +6,7 @@ import { Button, Container, Typography } from "@mui/material";
 import { Entries } from "./Entries";
 import { Favorite, Female, LocalHospital, Male, MedicalServices, Transgender } from "@mui/icons-material";
 import { EntryForm } from "./EntryForm";
+import { isAxiosError } from "axios";
 
 type Props = {
   diagnoses: Diagnosis[];
@@ -14,6 +15,7 @@ type Props = {
 const PatientPage = ({ diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [currentForm, setCurrentForm] = useState<Entry["type"] | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams() as { id: string };
 
@@ -45,10 +47,21 @@ const PatientPage = ({ diagnoses }: Props) => {
   const handleChangeCurrentForm = (val: Entry["type"] | null) => () => setCurrentForm(val);
 
   const handleAddEntry = async (newEntry: NewEntry) => {
-    const entry = await patientService.addEntry(patient.id, newEntry);
+    try {
+      const entry = await patientService.addEntry(patient.id, newEntry);
 
-    setPatient({ ...patient, entries: patient.entries.concat(entry) });
-    setCurrentForm(null);
+      setPatient({ ...patient, entries: patient.entries.concat(entry) });
+
+      setCurrentForm(null);
+
+      if (error) setError(null);
+    } catch (e) {
+      if (isAxiosError(e)) {
+        const { path, message } = e.response?.data?.error?.[0] || {};
+
+        setError(`Value of ${path[0]} is invalid: ${message}`);
+      }
+    }
   };
 
   return (
@@ -78,6 +91,7 @@ const PatientPage = ({ diagnoses }: Props) => {
           <EntryForm
             onAddEntry={handleAddEntry}
             onCancel={handleChangeCurrentForm(null)}
+            error={error}
             type={currentForm}
           />
         )}

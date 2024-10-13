@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -22,9 +23,10 @@ type Props = {
   onAddEntry: (entry: NewEntry) => void;
   onCancel: () => void;
   type: Entry["type"];
+  error: string | null;
 };
 
-export const EntryForm = ({ onAddEntry, onCancel, type }: Props) => {
+export const EntryForm = ({ onAddEntry, onCancel, type, error }: Props) => {
   const [values, setValues] = useState<NewEntry>(() => {
     const basicFields = {
       description: "",
@@ -42,8 +44,6 @@ export const EntryForm = ({ onAddEntry, onCancel, type }: Props) => {
         return { ...basicFields, type, discharge: { date: "", criteria: "" } };
     }
   });
-
-  console.log(values.type === "OccupationalHealthcare" && values?.sickLeave);
 
   const diagnosisCodeList = ["M24.2", "M51.2", "S03.5", "J10.1", "J06.9", "Z57.1", "N30.0"];
 
@@ -107,6 +107,12 @@ export const EntryForm = ({ onAddEntry, onCancel, type }: Props) => {
           fontWeight="medium"
           marginBottom="24px"
         >{`New ${type} Entry`}</Typography>
+
+        {error && (
+          <Alert severity="error" title={error}>
+            {error}
+          </Alert>
+        )}
 
         <TextField
           onChange={handleChangeField("description")}
